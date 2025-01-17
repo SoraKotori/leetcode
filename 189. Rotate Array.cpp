@@ -110,19 +110,20 @@ auto std_rotate(RandomAccessIterator first,
 class Solution {
 public:
     void rotate(vector<int>& nums, int k) {
-        auto last = nums.end();
-        for (auto size = std::size(nums); k %= size; size -= k)
+
+        auto first = begin(nums);
+        auto last = end(nums);
+        auto middle = last - k % size(nums);
+        auto next = middle;
+
+        while (first != next)
         {
-            // for (int index = 0; index < k; index++)
-            // {
-            //     swap(last[-k + index], last[-size + index]);
-            //     print(nums);
-            // }
-            swap_ranges(last - k, last, last - size);
-            print(nums);
+            iter_swap(first++, next++);
+            if (next == last) next = middle;
+            else if (first == middle) middle = next;
         }
     }
-};
+}; 
 
 int main(int argc, char const *argv[])
 {
