@@ -5,33 +5,49 @@
 #include <ranges>
 #include <iomanip>
 #include <queue>
+#include <functional>
 
 using namespace std;
 
-class Solution {
+// Function to print the grid_cost
+void printGridCost(const vector<vector<int>>& grid_cost) {
+    for (const auto& row : grid_cost) {
+        for (int cost : row) {
+            cout << cost << " ";
+        }
+        cout << endl;
+    }
+    cout << "-----------------" << endl;
+}
+
+void printGridCost2(const vector<unsigned int>& grid_cost, int m, int n) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++)
+            cout << grid_cost[i * n + j] << " ";
+        cout << endl;
+    }
+    cout << "-----------------" << endl;
+}
+
+class Solution_priority_queue {
 public:
     int minCost(vector<vector<int>>& grid) {
 
+        // cost, vertex
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> queue(greater{});
+        queue.push(make_pair(0, 0));
+
         auto m = size(grid);
         auto n = size(grid[0]);
-
-        auto cmp = [](const auto& pair1, const auto& pair2)
-        {
-            return pair1.first > pair2.first;
-        };
-
-        // cost, vertex
-        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> queue(cmp);
-        queue.push(make_pair(0, 0));
 
         vector<unsigned int> grid_cost(m * n, -1);
         grid_cost[0] = 0;
 
         auto top = queue.top();
-        auto exit = m * n - 1;
-        while (top.second != exit)
+        for (auto last_vertex = m * n - 1; top.second != last_vertex; top = queue.top())
         {
             auto [cost, vertex] = top;
+            queue.pop();
 
             auto push = [&](auto i, auto j, auto adj_cost)
             {
@@ -42,14 +58,12 @@ public:
                 auto new_cost = cost + adj_cost;
                 if  (new_cost >= grid_cost[adj_vertex])
                     return;
+                grid_cost[adj_vertex] = new_cost;
 
                 queue.push(make_pair(new_cost, adj_vertex));
             };
 
-            auto res = std::div(vertex, n);
-            auto i = res.quot;
-            auto j = res.rem;
-
+            auto [i, j] = std::div(vertex, n);
             for (int move = 1; move <= 4; move++)
             {
                 int adj_cost = grid[i][j] == move ? 0 : 1;
@@ -70,9 +84,6 @@ public:
                         break;
                 }
             }
-
-            queue.pop();
-            top = queue.top();
         }
 
         return top.first;
@@ -80,7 +91,7 @@ public:
 };
 
 int main() {
-    Solution solution;
+    Solution_priority_queue solution;
     vector<vector<int>> grid = {
         {3, 4, 3}, {2, 2, 2}, {2, 1, 1}, {4, 3, 2}, {2, 1, 4}, {2, 4, 1}, {3, 3, 3},
         {1, 4, 2}, {2, 2, 1}, {2, 1, 1}, {3, 3, 1}, {4, 1, 4}, {2, 1, 4}, {3, 2, 2},
