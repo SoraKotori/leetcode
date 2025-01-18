@@ -6,21 +6,20 @@
 #include <iomanip>
 #include <queue>
 #include <functional>
+#include <queue>
+#include <limits>
 
 using namespace std;
 
-// Function to print the grid_cost
-void printGridCost(const vector<vector<int>>& grid_cost) {
-    for (const auto& row : grid_cost) {
-        for (int cost : row) {
-            cout << cost << " ";
-        }
-        cout << endl;
+template <typename Container>
+void print1D(const Container& container) {
+    for (const auto& value : container) {
+            cout << setw(3) << value.first;
     }
-    cout << "-----------------" << endl;
+    cout << "\n-----------------" << endl;
 }
 
-void printGridCost2(const vector<unsigned int>& grid_cost, int m, int n) {
+void print2D(const vector<unsigned int>& grid_cost, int m, int n) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++)
             cout << grid_cost[i * n + j] << " ";
@@ -90,14 +89,76 @@ public:
     }
 };
 
+class Solution {
+public:
+    int minCost(vector<vector<int>>& grid) {
+
+        // cost, vertex
+        deque<pair<int, int>> queue{make_pair(0, 0)};
+
+        const auto m = size(grid);
+        const auto n = size(grid.front());
+
+        vector<int> grid_cost(m * n, numeric_limits<int>::max());
+        grid_cost.front() = 0;
+
+        auto top = queue.front();
+        for (auto last_vertex  = m * n - 1;
+                  last_vertex != top.second;
+             top = queue.front())
+        {
+            queue.pop_front();
+
+            auto push_adj = [&](auto i, auto j, auto adj_cost)
+            {
+                auto adj_vertex = i * n + j;
+                auto new_cost = top.first + adj_cost;
+                if  (new_cost >= grid_cost[adj_vertex])
+                    return;
+                grid_cost[adj_vertex] = new_cost;
+
+                if (adj_cost)
+                    queue.emplace_back(new_cost, adj_vertex);
+                else
+                    queue.emplace_front(new_cost, adj_vertex);
+            };
+
+            auto [i, j] = std::div(top.second, n);
+            auto adj_cost = 0;
+            for (int move = grid[i][j] - 1, move_end = move + 4; move < move_end; move++)
+            {
+                int adj_cost = grid[i][j] -1 != move;
+
+                switch (move % 4)
+                {
+                    case 0:
+                        if (j + 1 == n) break;
+                        push_adj(i, j + 1, adj_cost);
+                        break;
+                    case 1:
+                        if (j - 1 < 0) break;
+                        push_adj(i, j - 1, adj_cost);
+                        break;
+                    case 2:
+                        if (i + 1 == m) break;
+                        push_adj(i + 1, j, adj_cost);
+                        break;
+                    case 3:
+                        if (i - 1 < 0) break;
+                        push_adj(i - 1, j, adj_cost);
+                        break;
+                }
+                adj_cost = 1;
+            }
+        }
+        return top.first;
+    }
+};
+
 int main() {
-    Solution_priority_queue solution;
+    Solution solution;
     vector<vector<int>> grid = {
-        {3, 4, 3}, {2, 2, 2}, {2, 1, 1}, {4, 3, 2}, {2, 1, 4}, {2, 4, 1}, {3, 3, 3},
-        {1, 4, 2}, {2, 2, 1}, {2, 1, 1}, {3, 3, 1}, {4, 1, 4}, {2, 1, 4}, {3, 2, 2},
-        {3, 3, 1}, {4, 4, 1}, {1, 2, 2}, {1, 1, 1}, {1, 3, 4}, {1, 2, 1}, {2, 2, 4},
-        {2, 1, 3}, {1, 2, 1}, {4, 3, 2}, {3, 3, 4}, {2, 2, 1}, {3, 4, 3}, {4, 2, 3},
-        {4, 4, 4}
+        {1,1,3}, {3,2,2}, {1,1,4}
     };
 
     int result = solution.minCost(grid);
