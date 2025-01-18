@@ -127,8 +127,6 @@ public:
             auto adj_cost = 0;
             for (int move = grid[i][j] - 1, move_end = move + 4; move < move_end; move++)
             {
-                int adj_cost = grid[i][j] -1 != move;
-
                 switch (move % 4)
                 {
                     case 0:
