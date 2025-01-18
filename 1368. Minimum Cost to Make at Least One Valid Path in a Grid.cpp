@@ -110,7 +110,7 @@ public:
             queue.pop_front();
 
             auto adj_cost = 0;
-            for (int dir = grid[row][col] - 1, move_end = dir + 4; dir < move_end; dir++)
+            for (int dir = grid[row][col] - 1, dir_end = dir + 4; dir < dir_end; dir++)
             {
                 auto i = row + row_dirs[dir % 4];
                 auto j = col + col_dirs[dir % 4];
