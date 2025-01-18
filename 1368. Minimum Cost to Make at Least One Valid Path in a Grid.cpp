@@ -115,16 +115,14 @@ public:
                 auto i = row + row_dirs[dir % 4];
                 auto j = col + col_dirs[dir % 4];
 
-                if (0 <= i && 0 <= j && i < m && j < n)
-                {
-                    if (grid_cost[i * n + j] > grid_cost[row * n + col] + adj_cost) {
-                        grid_cost[i * n + j] = grid_cost[row * n + col] + adj_cost;
+                if (0 <= i && 0 <= j && i < m && j < n &&
+                    grid_cost[i * n + j] > grid_cost[row * n + col] + adj_cost) {
+                    grid_cost[i * n + j] = grid_cost[row * n + col] + adj_cost;
 
-                        if (adj_cost)
-                            queue.emplace_back(i, j);
-                        else
-                            queue.emplace_front(i, j);
-                    }
+                    if (adj_cost)
+                        queue.emplace_back(i, j);
+                    else
+                        queue.emplace_front(i, j);
                 }
                 adj_cost = 1;
             }
