@@ -93,7 +93,6 @@ class Solution {
 public:
     int minCost(vector<vector<int>>& grid) {
 
-        // cost, vertex
         deque<pair<int, int>> queue{make_pair(0, 0)};
 
         const auto m = size(grid);
@@ -102,54 +101,36 @@ public:
         vector<int> grid_cost(m * n, numeric_limits<int>::max());
         grid_cost.front() = 0;
 
-        auto top = queue.front();
-        for (auto last_vertex  = m * n - 1;
-                  last_vertex != top.second;
-             top = queue.front())
+        array row_dirs = { 0, 0, 1, -1 };
+        array col_dirs = { 1, -1, 0, 0 };
+
+        while (!queue.empty())
         {
+            auto [row, col] = queue.front();
             queue.pop_front();
 
-            auto push_adj = [&](auto i, auto j, auto adj_cost)
-            {
-                auto adj_vertex = i * n + j;
-                auto new_cost = top.first + adj_cost;
-                if  (new_cost >= grid_cost[adj_vertex])
-                    return;
-                grid_cost[adj_vertex] = new_cost;
-
-                if (adj_cost)
-                    queue.emplace_back(new_cost, adj_vertex);
-                else
-                    queue.emplace_front(new_cost, adj_vertex);
-            };
-
-            auto [i, j] = std::div(top.second, n);
             auto adj_cost = 0;
-            for (int move = grid[i][j] - 1, move_end = move + 4; move < move_end; move++)
+            for (int dir = grid[row][col] - 1, move_end = dir + 4; dir < move_end; dir++)
             {
-                switch (move % 4)
+                auto i = row + row_dirs[dir % 4];
+                auto j = col + col_dirs[dir % 4];
+
+                if (0 <= i && 0 <= j && i < m && j < n)
                 {
-                    case 0:
-                        if (j + 1 == n) break;
-                        push_adj(i, j + 1, adj_cost);
-                        break;
-                    case 1:
-                        if (j - 1 < 0) break;
-                        push_adj(i, j - 1, adj_cost);
-                        break;
-                    case 2:
-                        if (i + 1 == m) break;
-                        push_adj(i + 1, j, adj_cost);
-                        break;
-                    case 3:
-                        if (i - 1 < 0) break;
-                        push_adj(i - 1, j, adj_cost);
-                        break;
+                    if (grid_cost[i * n + j] > grid_cost[row * n + col] + adj_cost) {
+                        grid_cost[i * n + j] = grid_cost[row * n + col] + adj_cost;
+
+                        if (adj_cost)
+                            queue.emplace_back(i, j);
+                        else
+                            queue.emplace_front(i, j);
+                    }
                 }
                 adj_cost = 1;
             }
         }
-        return top.first;
+
+        return grid_cost.back();
     }
 };
 
