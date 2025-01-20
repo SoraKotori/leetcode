@@ -13,3 +13,6 @@ target_compile_features(42_Trapping_Rain_Water PRIVATE cxx_std_23)
 
 add_executable(407_Trapping_Rain_Water_II "407. Trapping Rain Water II.cpp")
 target_compile_features(407_Trapping_Rain_Water_II PRIVATE cxx_std_23)
+
+add_executable(2661_First_Completely_Painted_Row_or_Column "2661. First Completely Painted Row or Column.cpp")
+target_compile_features(2661_First_Completely_Painted_Row_or_Column PRIVATE cxx_std_23)
