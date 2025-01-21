@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-class Solution {
+class Solution1 {
 public:
     int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
         int m = size(mat);
@@ -23,6 +23,39 @@ public:
         }
 
         return 0;
+    }
+};
+
+class Solution {
+public:
+    int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
+
+        vector<int> map(size(arr) + 1);
+        for (int i = 0; i < size(arr); i++)
+            map[arr[i]] = i;
+
+        auto m = size(mat);
+        auto n = size(mat[0]);
+
+        int value = numeric_limits<int>::max();
+
+        for (int i = 0; i < m; i ++)
+        {
+            int sub = 0;
+            for (int j = 0; j < n; j++)
+                sub = max(sub, map[mat[i][j]]);
+            value = min(value, sub);
+        }
+
+        for (int j = 0; j < n; j++)
+        {
+            int sub = 0;
+            for (int i = 0; i < m; i ++)
+                sub = max(sub, map[mat[i][j]]);
+            value = min(value, sub);
+        }
+        
+        return value;
     }
 };
 
