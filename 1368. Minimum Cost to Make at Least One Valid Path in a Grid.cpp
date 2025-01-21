@@ -8,6 +8,7 @@
 #include <functional>
 #include <queue>
 #include <limits>
+#include <deque>
 
 using namespace std;
 
@@ -89,7 +90,7 @@ public:
     }
 };
 
-class Solution {
+class Solution_0_1_BFS {
 public:
     int minCost(vector<vector<int>>& grid) {
 
@@ -101,8 +102,8 @@ public:
         vector<int> grid_cost(m * n, numeric_limits<int>::max());
         grid_cost.front() = 0;
 
-        array row_dirs = { 0, 0, 1, -1 };
-        array col_dirs = { 1, -1, 0, 0 };
+        array row_dirs = {0, 0, 1, -1};
+        array col_dirs = {1, -1, 0, 0};
 
         while (!queue.empty())
         {
@@ -132,7 +133,78 @@ public:
     }
 };
 
+class Solution {
+    array<pair<int, int>, 4> dirs = {{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}};
+public:
+    auto dfs(vector<vector<int>>& grid,
+            vector<vector<int>>& costs,
+            deque<pair<int, int>>& queue,
+            int row,
+            int col)
+    {
+        auto m = size(grid);
+        auto n = size(grid[0]);
+        auto cost = costs[row][col];
+
+        while (true)
+        {
+            auto  [dir_row, dir_col] = dirs[grid[row][col] - 1];
+            row += dir_row;
+            col += dir_col;
+
+            if (row < 0 || col < 0 || row == m || col == n ||
+                costs[row][col] <= cost)
+                break;
+
+            costs[row][col] = cost;
+            queue.emplace_front(row, col);
+        }
+    }
+
+    int minCost(vector<vector<int>>& grid) {
+
+        auto m = size(grid);
+        auto n = size(grid[0]);
+
+        deque<pair<int, int>> queue;
+        queue.emplace_back(0, 0);
+
+        vector<vector<int>> costs(m , vector<int>(n, numeric_limits<int>::max()));
+        costs[0][0] = 0;
+
+        dfs(grid, costs, queue, 0, 0);
+
+        while (!queue.empty())
+        {
+            auto [row, col] = queue.front();
+            queue.pop_front();
+
+            auto dir_cost = 0;
+            for (auto dir = grid[row][col] - 1, end = dir + 4; dir < end; dir++)
+            {
+                auto [dir_row, dir_col] = dirs[dir % 4];
+
+                auto i = row + dir_row;
+                auto j = col + dir_col;
+                if (i < 0 || j < 0 || i == m || j == n ||
+                    costs[i][j] <= costs[row][col] + dir_cost)
+                    continue;
+                costs[i][j] = costs[row][col] + dir_cost;
+                if (dir_cost)
+                    queue.emplace_back(i, j);
+                else
+                    queue.emplace_front(i, j);
+
+                dir_cost = 1;
+            }
+        }
+
+        return costs[m - 1][n - 1];
+    }
+};
+
 int main() {
+    // Solution_0_1_BFS solution;
     Solution solution;
     vector<vector<int>> grid = {
         {1,1,3}, {3,2,2}, {1,1,4}
