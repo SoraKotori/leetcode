@@ -1,16 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-#include <ranges>
-#include <iomanip>
-#include <queue>
-#include <functional>
-#include <queue>
-#include <limits>
-#include <deque>
-
-using namespace std;
+#include "header.h"
 
 template <typename Container>
 void print1D(const Container& container) {
@@ -28,6 +16,20 @@ void print2D(const vector<unsigned int>& grid_cost, int m, int n) {
     }
     cout << "-----------------" << endl;
 }
+
+void print2D(const vector<vector<int>>& grid_cost) {
+    for (auto& sub_cost : grid_cost) {
+        for (auto cost : sub_cost)
+            cout << cost << " ";
+        cout << endl;
+    }
+    cout << "-----------------" << endl;
+}
+
+class Solution {
+public:
+    virtual int minCost(vector<vector<int>>& grid) = 0;
+};
 
 class Solution_priority_queue {
 public:
@@ -133,85 +135,122 @@ public:
     }
 };
 
-class Solution {
+class Solution_leetcode {
+private:
+    // Direction vectors: right, left, down, up (matching grid values 1,2,3,4)
+    const vector<vector<int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+public:
+    int minCost(vector<vector<int>>& grid) {
+        int numRows = grid.size(), numCols = grid[0].size(), cost = 0;
+
+        // Track minimum cost to reach each cell
+        vector<vector<int>> minCost(numRows, vector<int>(numCols, INT_MAX));
+
+        // Queue for BFS part - stores cells that need cost increment
+        queue<pair<int, int>> queue;
+
+        // Start DFS from origin with cost 0
+        dfs(grid, 0, 0, minCost, cost, queue);
+
+        // BFS part - process cells level by level with increasing cost
+        while (!queue.empty()) {
+            cost++;
+            int levelSize = queue.size();
+
+            while (levelSize-- > 0) {
+                auto [row, col] = queue.front();
+                queue.pop();
+
+                // Try all 4 directions for next level
+                for (int dir = 0; dir < 4; dir++) {
+                    dfs(grid, row + dirs[dir][0], col + dirs[dir][1], minCost,
+                        cost, queue);
+                }
+            }
+        }
+
+        return minCost[numRows - 1][numCols - 1];
+    }
+
+private:
+    // DFS to explore all reachable cells with current cost
+    void dfs(vector<vector<int>>& grid, int row, int col,
+             vector<vector<int>>& minCost, int cost,
+             queue<pair<int, int>>& queue) {
+        if (!isUnvisited(minCost, row, col)) return;
+
+        minCost[row][col] = cost;
+        queue.push({row, col});
+
+        // Follow the arrow direction without cost increase
+        int nextDir = grid[row][col] - 1;
+        dfs(grid, row + dirs[nextDir][0], col + dirs[nextDir][1], minCost, cost,
+            queue);
+    }
+
+    // Check if cell is within bounds and unvisited
+    bool isUnvisited(vector<vector<int>>& minCost, int row, int col) {
+        return row >= 0 && col >= 0 && row < minCost.size() &&
+               col < minCost[0].size() && minCost[row][col] == INT_MAX;
+    }
+};
+
+class Solution_DFS : public Solution {
     array<pair<int, int>, 4> dirs = {{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}};
 public:
     auto dfs(vector<vector<int>>& grid,
-            vector<vector<int>>& costs,
-            deque<pair<int, int>>& queue,
-            int row,
-            int col)
+             vector<vector<int>>& costs,
+             deque<pair<int, int>>& queue,
+             int row,
+             int col,
+             int cost)
     {
-        auto m = size(grid);
-        auto n = size(grid[0]);
-        auto cost = costs[row][col];
-
-        while (true)
+        while (0 <= row && row < size(grid) && 
+               0 <= col && col < size(grid[0]) &&
+               costs[row][col] > cost)
         {
             auto  [dir_row, dir_col] = dirs[grid[row][col] - 1];
             row += dir_row;
             col += dir_col;
 
-            if (row < 0 || col < 0 || row == m || col == n ||
-                costs[row][col] <= cost)
-                break;
-
             costs[row][col] = cost;
-            queue.emplace_front(row, col);
+            queue.emplace_back(row, col);
         }
     }
 
     int minCost(vector<vector<int>>& grid) {
 
-        auto m = size(grid);
-        auto n = size(grid[0]);
-
         deque<pair<int, int>> queue;
-        queue.emplace_back(0, 0);
 
-        vector<vector<int>> costs(m , vector<int>(n, numeric_limits<int>::max()));
-        costs[0][0] = 0;
+        vector<vector<int>> costs(size(grid) , vector<int>(size(grid[0]), numeric_limits<int>::max()));
 
-        dfs(grid, costs, queue, 0, 0);
+        dfs(grid, costs, queue, 0, 0, 0);
 
         while (!queue.empty())
         {
             auto [row, col] = queue.front();
             queue.pop_front();
 
-            auto dir_cost = 0;
-            for (auto dir = grid[row][col] - 1, end = dir + 4; dir < end; dir++)
+            for (auto dir = grid[row][col] - 1, end = dir + 3; dir < end; dir++)
             {
                 auto [dir_row, dir_col] = dirs[dir % 4];
-
-                auto i = row + dir_row;
-                auto j = col + dir_col;
-                if (i < 0 || j < 0 || i == m || j == n ||
-                    costs[i][j] <= costs[row][col] + dir_cost)
-                    continue;
-                costs[i][j] = costs[row][col] + dir_cost;
-                if (dir_cost)
-                    queue.emplace_back(i, j);
-                else
-                    queue.emplace_front(i, j);
-
-                dir_cost = 1;
+                dfs(grid, costs, queue, row + dir_row, col + dir_col, costs[row][col] + 1);
+                print2D(costs);
             }
         }
 
-        return costs[m - 1][n - 1];
+        return costs.back().back();
     }
 };
 
-int main() {
-    // Solution_0_1_BFS solution;
-    Solution solution;
-    vector<vector<int>> grid = {
-        {1,1,3}, {3,2,2}, {1,1,4}
-    };
+TEST(Solution_DFS, minCost)
+{
+    Solution_DFS sol;
 
-    int result = solution.minCost(grid);
-    cout << "The minimum cost to make at least one valid path is: " << result << endl;
+    vector<vector<int>> grid1 = {{1,1,3}, {3,2,2}, {1,1,4}};
+    EXPECT_EQ(sol.minCost(grid1), 0);
 
-    return 0;
+    vector<vector<int>> grid2 = {{2,2,2}, {2,2,2}};
+    EXPECT_EQ(sol.minCost(grid2), 3);
 }
