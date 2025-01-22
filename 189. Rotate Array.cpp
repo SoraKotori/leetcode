@@ -104,10 +104,12 @@ auto std_rotate(RandomAccessIterator first,
 
             std::swap(n, k);
         }
+
+        print(vector<int>(first, last));
     }
 }
 
-class Solution {
+class Solution_iterator {
 public:
     void rotate(vector<int>& nums, int k) {
 
@@ -119,21 +121,126 @@ public:
         while (first != next)
         {
             iter_swap(first++, next++);
-            if (next == last) next = middle;
-            else if (first == middle) middle = next;
+            if (next == last)
+                next = middle;
+            else if (middle == first)
+                     middle = next;
         }
     }
 }; 
+
+class Solution2
+{
+public:
+    void rotate(int nums[], int n, int k) 
+    {
+        if ((n == 0) || (k <= 0) || (k%n == 0))
+        {
+            return;
+        }
+        
+        k = k%n;
+        // Rotation to the right by k steps is equivalent to swapping 
+        // the two subarrays nums[0,...,n - k - 1] and nums[n - k,...,n - 1].
+        int start = 0;
+        int tmp = 0;
+        while (k > 0)
+        {
+            if (n - k >= k)
+            {
+                // The left subarray with size n - k is longer than 
+                // the right subarray with size k. Exchange 
+                // nums[n - 2*k,...,n - k - 1] with nums[n - k,...,n - 1].
+                for (int i = 0; i < k; i++)
+                {
+                    tmp = nums[start + n - 2*k + i];
+                    nums[start + n - 2*k + i] = nums[start + n - k + i];
+                    nums[start + n - k + i] = tmp;
+                }
+                
+                // nums[n - 2*k,...,n - k - 1] are in their correct positions now.
+                // Need to rotate the elements of nums[0,...,n - k - 1] to the right 
+                // by k%n steps.
+                n = n - k;
+                k = k%n;
+            }
+            else
+            {
+                // The left subarray with size n - k is shorter than 
+                // the right subarray with size k. Exchange 
+                // nums[0,...,n - k - 1] with nums[n - k,...,2*(n - k) - 1].
+                for (int i = 0; i < n - k; i++)
+                {
+                    tmp = nums[start + i];
+                    nums[start + i] = nums[start + n - k + i];
+                    nums[start + n - k + i] = tmp;
+                }
+                
+                // nums[n - k,...,2*(n - k) - 1] are in their correct positions now.
+                // Need to rotate the elements of nums[n - k,...,n - 1] to the right 
+                // by k - (n - k) steps.
+                tmp = n - k;
+                n = k;
+                k -= tmp;
+                start += tmp;
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = size(nums);
+        auto first = begin(nums);
+        auto last = end(nums);
+
+        while (k)
+        {
+            if (n - k > k)
+            {
+                last = swap_ranges(last - k, last, last - k * 2);
+                n -= k;
+            }
+            else // if (distance(first1, last1) > distance(first2, last2))
+            {
+                first = swap_ranges(first, first + k, first + k * 2);
+                swap(n, k);
+            }
+            print(nums);
+        }
+    }
+};
+
+/*
+k = 2
+1 2 3 4 5 6 7 8 9
+3 4 1 2 5 6 7 8 9
+5 6 1 2 3 4 7 8 9
+7 8 1 2 3 4 5 6 9
+9 8 1 2 3 4 5 6 7
+
+k = 7
+1 2 3 4 5 6 7 8 9
+8 9 3 4 5 6 7 1 2
+3 4 8 9 5 6 7 1 2
+3 4 5 6 8 9 7 1 2
+3 4 5 6 7 9 8 1 2
+3 4 5 6 7 8 9 1 2
+*/
 
 int main(int argc, char const *argv[])
 {
     Solution s;
 
-    auto iota_view = std::ranges::iota_view(1, 28);
-    vector<int> vec(iota_view.begin(), iota_view.end());
-    print(vec);
-
-    s.rotate(vec, 11);
-
+    auto iota_view1 = std::ranges::iota_view(1, 10);
+    vector<int> vec1(iota_view1.begin(), iota_view1.end());
+    s.rotate(vec1, 4);
+    // std_rotate(begin(vec1), begin(vec1) + 4, end(vec1));
+    print(vec1);
+    // auto iota_view2 = std::ranges::iota_view(1, 28);
+    // vector<int> vec2(iota_view2.begin(), iota_view2.end());
+    // s.rotate(vec2, 11);
+    // std::rotate();
     return 0;
 }
