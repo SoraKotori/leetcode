@@ -210,12 +210,13 @@ public:
                0 <= col && col < size(grid[0]) &&
                costs[row][col] > cost)
         {
+            costs[row][col] = cost;
+            queue.emplace_back(row, col);
+            // print2D(costs);
+
             auto  [dir_row, dir_col] = dirs[grid[row][col] - 1];
             row += dir_row;
             col += dir_col;
-
-            costs[row][col] = cost;
-            queue.emplace_back(row, col);
         }
     }
 
@@ -232,11 +233,12 @@ public:
             auto [row, col] = queue.front();
             queue.pop_front();
 
-            for (auto dir = grid[row][col] - 1, end = dir + 3; dir < end; dir++)
+            for (auto dir = grid[row][col], end = dir + 3; dir < end; dir++)
             {
                 auto [dir_row, dir_col] = dirs[dir % 4];
-                dfs(grid, costs, queue, row + dir_row, col + dir_col, costs[row][col] + 1);
-                print2D(costs);
+                dfs(grid, costs, queue,
+                    row + dir_row,
+                    col + dir_col, costs[row][col] + 1);
             }
         }
 
