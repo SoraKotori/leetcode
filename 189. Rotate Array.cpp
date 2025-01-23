@@ -191,24 +191,23 @@ public:
 class Solution {
 public:
     void rotate(vector<int>& nums, int k) {
-        int n = size(nums);
         auto first = begin(nums);
         auto last = end(nums);
+        auto midden = last - k % size(nums);
 
-        k %= n;
-        while (k)
+        for (size_t lsize, rsize;
+            (lsize = distance(first, midden)) &&
+            (rsize = distance(midden, last));)
         {
-            if (n - k > k)
+            if (lsize > rsize)
             {
-                last = swap_ranges(last - k, last, last - k * 2);
-                n -= k;
+                last = swap_ranges(midden, last, midden - rsize);
+                midden -= rsize;
             }
             else
             {
-                auto temp_k = n - k;
-                first = swap_ranges(first + temp_k, first + temp_k * 2, first);
-                k -= temp_k;
-                n -= temp_k;
+                first = swap_ranges(midden, midden + lsize, first);
+                midden += lsize;
             }
         }
     }
