@@ -195,6 +195,7 @@ public:
         auto first = begin(nums);
         auto last = end(nums);
 
+        k %= n;
         while (k)
         {
             if (n - k > k)
@@ -202,31 +203,31 @@ public:
                 last = swap_ranges(last - k, last, last - k * 2);
                 n -= k;
             }
-            else // if (distance(first1, last1) > distance(first2, last2))
+            else
             {
-                first = swap_ranges(first, first + k, first + k * 2);
-                swap(n, k);
+                auto temp_k = n - k;
+                first = swap_ranges(first + temp_k, first + temp_k * 2, first);
+                k -= temp_k;
+                n -= temp_k;
             }
-            print(nums);
         }
     }
 };
 
 /*
-k = 2
-1 2 3 4 5 6 7 8 9
-3 4 1 2 5 6 7 8 9
-5 6 1 2 3 4 7 8 9
-7 8 1 2 3 4 5 6 9
-9 8 1 2 3 4 5 6 7
+k = 4
+1 2 3 4 5|6 7 8 9
+1|6 7 8 9}2 3 4 5
+6{1|7 8 9}2 3 4 5
 
-k = 7
-1 2 3 4 5 6 7 8 9
-8 9 3 4 5 6 7 1 2
-3 4 8 9 5 6 7 1 2
-3 4 5 6 8 9 7 1 2
-3 4 5 6 7 9 8 1 2
-3 4 5 6 7 8 9 1 2
+6 7 8 9|1 2 3 4 5
+
+k = 5
+1 2 3 4|5 6 7 8 9
+5 6 7 8{1 2 3 4|9
+5 6 7 8{1 2 3|9}4
+
+5 6 7 8 9|1 2 3 4
 */
 
 int main(int argc, char const *argv[])
@@ -235,12 +236,13 @@ int main(int argc, char const *argv[])
 
     auto iota_view1 = std::ranges::iota_view(1, 10);
     vector<int> vec1(iota_view1.begin(), iota_view1.end());
-    s.rotate(vec1, 4);
-    // std_rotate(begin(vec1), begin(vec1) + 4, end(vec1));
+    s.rotate(vec1, 5);
     print(vec1);
-    // auto iota_view2 = std::ranges::iota_view(1, 28);
-    // vector<int> vec2(iota_view2.begin(), iota_view2.end());
-    // s.rotate(vec2, 11);
-    // std::rotate();
+
+    auto iota_view2 = std::ranges::iota_view(1, 28);
+    vector<int> vec2(iota_view2.begin(), iota_view2.end());
+    s.rotate(vec2, 11);
+    print(vec2);
+
     return 0;
 }
