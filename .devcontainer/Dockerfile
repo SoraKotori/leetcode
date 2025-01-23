@@ -7,6 +7,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
 RUN apt-get install -y --no-install-recommends \
     gcc-14 g++-14
 
+RUN apt-get install -y --no-install-recommends \
+    libgtest-dev
+
 FROM base as development
 
 RUN apt-get install -y --no-install-recommends \
