@@ -12,5 +12,6 @@ add_executable(407_Trapping_Rain_Water_II "407. Trapping Rain Water II.cpp")
 add_executable(2661_First_Completely_Painted_Row_or_Column "2661. First Completely Painted Row or Column.cpp")
 add_executable(2017_Grid_Game "2017. Grid Game.cpp")
 add_executable(1765_Map_of_Highest_Peak "1765. Map of Highest Peak.cpp")
+add_executable(1267_Count_Servers_that_Communicate "1267. Count Servers that Communicate.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
