@@ -81,62 +81,95 @@ public:
     }
 };
 
-class Solution {
+#include <ranges>
+class Solution_iterative_DFS {
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = size(graph);
+        vector<bool> safe(n, true);
+        vector<int> visit(n, 0);
+        vector<int> stack;
+        
+        for (auto root = begin(visit); (root = find(root, end(visit), 0)) != end(visit);)
+            for (stack.emplace_back(distance(begin(visit), root)); !stack.empty(); stack.pop_back())
+            {
+                auto node = stack.back();
+                for (int index; (index = visit[node]++) < size(graph[node]);)
+                    if (auto neighbor = graph[node][index]; visit[neighbor] == 0) // non-know
+                        node = stack.emplace_back(neighbor);
+                    else if (visit[neighbor] != size(graph[neighbor]) + 1) // unsafe
+                        safe[node] = false;
 
-        vector<int> visited(n, 0);
-        vector<int> is_safe(n, 0);
-        vector<int> stack(n);
-        iota(begin(stack), end(stack), 0);
+                if (safe[node])
+                    safe[node] = ranges::all_of(graph[node], [&](auto neighbor) { return safe[neighbor]; });
+            }
 
-        while (!stack.empty())
+        visit.erase(ranges::copy_if(views::iota(0, n), begin(visit), [&](auto node) { return safe[node]; }).out, end(visit));
+        return visit;
+    }
+};
+class Solution {
+public:
+    bool dfs(int node,vector<int> &visited,vector<int> &pathVisited,vector<int> &checked,vector<vector<int>> &graph)
+    {
+        visited[node]=1;
+        pathVisited[node]=1;
+
+        for(int nei : graph[node])
         {
-            int index;
-            auto node = stack.back();
-            while ((index = visited[node]++) < size(graph[node]))
-                if (auto adj = graph[node][index]; visited[adj] == 0)
-                    node = stack.emplace_back(adj);
-
-            if (index == size(graph[node]))
-                if (ranges::all_of(graph[node], [&](auto adj) { return is_safe[adj]; }))
-                    is_safe[node] = true;
-
-            stack.pop_back();
+            if(!visited[nei])
+            {
+                if(dfs(nei,visited,pathVisited,checked,graph))
+                    return true;
+            }
+            else if(pathVisited[nei]==1)
+                return true;
         }
 
-        stack.erase(ranges::copy_if(views::iota(0, n), begin(stack), [&](auto node) { return is_safe[node]; }).out, end(stack));
-        return stack;
+        checked[node]=1;
+        pathVisited[node]=0;
+        return false;
+    }
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> visited(n,0);
+        vector<int> pathVisited(n,0);
+        vector<int> checked(n,0);
+        vector<int> safe;
+
+        for(int i=0;i<n;i++)
+            if(!visited[i])
+                dfs(i,visited,pathVisited,checked,graph);
+
+        for(int i=0;i<n;i++)
+        {
+            if(checked[i]==1)
+                safe.push_back(i);
+        }
+
+        return safe;
     }
 };
 
 int main() {
-    Solution solution;
+    Solution_iterative_DFS solution;
+    vector<vector<vector<int>>> test_cases = {
+        {{1, 2}, {2, 3}, {5}, {0}, {5}, {}, {}},
+        {{1, 3, 7, 9}, {1, 8}, {7}, {5, 6, 7, 8}, {5, 6, 7, 8}, {8}, {7, 8, 9}, {8}, {9}, {}},
+        {{1, 2, 3, 4}, {1, 2}, {3, 4}, {0, 4}, {}},
+        {{}, {0, 2, 3, 4}, {3}, {4}, {}},
+        {{0}, {2, 3, 4}, {3, 4}, {0, 4}, {}}
+    };
 
-    vector<vector<int>> graph1 = {{1, 2}, {2, 3}, {5}, {0}, {5}, {}, {}};
-    vector<int> result1 = solution.eventualSafeNodes(graph1);
-    cout << "Result 1: ";
-    for (int node : result1) {
-        cout << node << " ";
+    for (int i = 0; i < test_cases.size(); ++i) {
+        vector<int> result = solution.eventualSafeNodes(test_cases[i]);
+        cout << "Result " << i + 1 << ": ";
+        for (int node : result) {
+            cout << node << " ";
+        }
+        cout << endl;
     }
-    cout << endl;
-
-    vector<vector<int>> graph2 = {{1, 2, 3, 4}, {1, 2}, {3, 4}, {0, 4}, {}};
-    vector<int> result2 = solution.eventualSafeNodes(graph2);
-    cout << "Result 2: ";
-    for (int node : result2) {
-        cout << node << " ";
-    }
-    cout << endl;
-
-    vector<vector<int>> graph3 = {{}, {0, 2, 3, 4}, {3}, {4}, {}};
-    vector<int> result3 = solution.eventualSafeNodes(graph3);
-    cout << "Result 3: ";
-    for (int node : result3) {
-        cout << node << " ";
-    }
-    cout << endl;
 
     return 0;
 }
