@@ -14,5 +14,6 @@ add_executable(2017_Grid_Game "2017. Grid Game.cpp")
 add_executable(1765_Map_of_Highest_Peak "1765. Map of Highest Peak.cpp")
 add_executable(1267_Count_Servers_that_Communicate "1267. Count Servers that Communicate.cpp")
 add_executable(802_Find_Eventual_Safe_States "802. Find Eventual Safe States.cpp")
+add_executable(2948_Make_Lexicographically_Smallest_Array_by_Swapping_Elements "2948. Make Lexicographically Smallest Array by Swapping Elements.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
