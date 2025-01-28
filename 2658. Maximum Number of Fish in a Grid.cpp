@@ -1,27 +1,17 @@
 #include "header.h"
 
 class Solution {
-    array<pair<int, int>, 4> dirs{{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}};
 public:
     int dfs(vector<vector<int>>& grid, int row, int col)
     {
-        int m = size(grid);
-        int n = size(grid[0]);
-
         int fish = grid[row][col];
         grid[row][col] = 0;
-        for (auto [dir_i, dir_j] : dirs)
-        {
-            auto i = row + dir_i;
-            auto j = col + dir_j;
 
-            if (0 <= i && 0 <= j && i < m && j < n &&
-                grid[i][j] > 0)
-            {
-                fish += dfs(grid, i, j);
-            }
-        }
-
+        if (auto i = row - 1; i >= 0            && grid[i][col]) fish += dfs(grid, i, col);
+        if (auto i = row + 1; i < size(grid)    && grid[i][col]) fish += dfs(grid, i, col);
+        if (auto j = col - 1; j >= 0            && grid[row][j]) fish += dfs(grid, row, j);
+        if (auto j = col + 1; j < size(grid[0]) && grid[row][j]) fish += dfs(grid, row, j);
+        
         return fish;
     }
 
@@ -32,10 +22,8 @@ public:
         int max_fish = 0;
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
-                if (grid[i][j] > 0)
-                {
+                if (grid[i][j])
                     max_fish = max(max_fish, dfs(grid, i, j));
-                }
 
         return max_fish;
     }
