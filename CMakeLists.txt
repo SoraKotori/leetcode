@@ -19,5 +19,6 @@ add_executable(2127_Maximum_Employees_to_Be_Invited_to_a_Meeting "2127. Maximum 
 add_executable(1462_Course_Schedule_IV "1462. Course Schedule IV.cpp")
 add_executable(2658_Maximum_Number_of_Fish_in_a_Grid "2658. Maximum Number of Fish in a Grid.cpp")
 add_executable(684_Redundant_Connection "684. Redundant Connection.cpp")
+add_executable(785_Is_Graph_Bipartite "785. Is Graph Bipartite?.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
