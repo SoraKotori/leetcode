@@ -15,84 +15,59 @@ public:
             return node;
         };
 
-        int max_island = 0;
-        vector<int> island_size(m * n);
-        for (int i = 0 ; i < m; i++)
-            for (int j = 0; j < n; j++)
-                if (grid[i][j])
-                {
-                    island_size[i * n + j] = 1;
-                    max_island = 1;
-                }
-
+        vector<int> island_size(m * n, 1);
         array<pair<int, int>, 4> dirs{{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}};
+
         for (int i = 0 ; i < m; i++)
             for (int j = 0; j < n; j++)
                 if (grid[i][j])
-                {
-                    auto node_0 = i * n + j;
-                    auto root_0 = find_root(node_0);
-
                     for (auto [dir_i, dir_j] : dirs)
                     {
-                        auto row = i + dir_i;
-                        auto col = j + dir_j;
+                        auto node_i = i + dir_i;
+                        auto node_j = j + dir_j;
 
-                        if (0 <= row && 0 <= col && row < m && col < n && grid[row][col])
+                        if (node_i < 0 || m <= node_i ||
+                            node_j < 0 || n <= node_j || grid[node_i][node_j] == 0)
+                            continue;
+
+                        auto root_0 = find_root(i * n + j);
+                        auto root_1 = find_root(node_i * n + node_j);
+                        if  (root_1 != root_0)
                         {
-                            auto node_1 = row * n + col;
-                            auto root_1 = find_root(node_1);
-
-                            if (root_0 == root_1)
-                                continue;
-
-                            if (node_0 != root_0 || node_1 == root_1)
-                            {
-                                parents[root_1] = root_0;
-                                island_size[root_0] += island_size[root_1];
-                                island_size[root_1] = 0;
-                                max_island = max(max_island, island_size[root_0]);
-                            }
-                            else
-                            {
-                                parents[root_0] = root_1;
-                                island_size[root_1] += island_size[root_0];
-                                island_size[root_0] = 0;
-                                max_island = max(max_island, island_size[root_1]);
-                            }
+                            parents[root_1] = root_0;
+                            island_size[root_0] += island_size[root_1];
                         }
                     }
-                }
 
+        int max_size = 0;
         for (int i = 0 ; i < m; i++)
             for (int j = 0; j < n; j++)
-                if (grid[i][j] == 0)
+                if (grid[i][j])
+                    max_size = max(max_size, island_size[i * n + j]);
+                else
                 {
                     int island = 1;
                     set<int> island_root;
 
-                    for (int dir_i = 0; dir_i < 4; dir_i++)
+                    for (auto [dir_i, dir_j] : dirs)
                     {
-                        auto node_0_i = i + dirs[dir_i].first;
-                        auto node_0_j = j + dirs[dir_i].second;
+                        auto node_i = i + dir_i;
+                        auto node_j = j + dir_j;
 
-                        if (node_0_i < 0 || node_0_j < 0 || m <= node_0_i || n <= node_0_j ||
-                            grid[node_0_i][node_0_j] == 0)
+                        if (node_i < 0 || m <= node_i ||
+                            node_j < 0 || n <= node_j || grid[node_i][node_j] == 0)
                             continue;
-                        auto node_0 = node_0_i * n + node_0_j;
-                        auto root_0 = find_root(node_0);
 
-                        if (!island_root.contains(root_0))
-                        {
-                            island_root.emplace(root_0);
-                            island += island_size[root_0];
-                        }
+                        auto root = find_root(node_i * n + node_j);
+
+                        if (auto [it, inserted] = island_root.emplace(root); inserted)
+                            island += island_size[root];
                     }
 
-                    max_island = max(max_island, island);
+                    max_size = max(max_size, island);
                 }
 
-        return max_island;
+        return max_size;
     }
 };
 
