@@ -25,5 +25,6 @@ add_executable(827_Making_A_Large_Island "827. Making A Large Island.cpp")
 add_executable(1752_Check_if_Array_Is_Sorted_and_Rotated "1752. Check if Array Is Sorted and Rotated.cpp")
 add_executable(3105_Longest_Strictly_Increasing_or_Strictly_Decreasing_Subarray "3105. Longest Strictly Increasing or Strictly Decreasing Subarray.cpp")
 add_executable(1800_Maximum_Ascending_Subarray_Sum "1800. Maximum Ascending Subarray Sum.cpp")
+add_executable(1790_Check_if_One_String_Swap_Can_Make_Strings_Equal "1790. Check if One String Swap Can Make Strings Equal.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
