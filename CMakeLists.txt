@@ -29,5 +29,6 @@ add_executable(1790_Check_if_One_String_Swap_Can_Make_Strings_Equal "1790. Check
 add_executable(1726_Tuple_with_Same_Product "1726. Tuple with Same Product.cpp")
 add_executable(167_Two_Sum_II_Input_Array_Is_Sorted "167. Two Sum II - Input Array Is Sorted.cpp")
 add_executable(15_3Sum "15. 3Sum.cpp")
+add_executable(2349_Design_a_Number_Container_System "2349. Design a Number Container System.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
