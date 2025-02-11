@@ -8,54 +8,11 @@ public:
     }
 };
 
-vector<int> computeLongestPrefixSuffix(string pattern) {
-    // Array to store the longest proper prefix which is also a suffix
-    vector<int> lps(pattern.length(), 0);
-
-    // Initialize tracking variables for prefix and current position
-    for (int current = 1, prefixLength = 0; current < pattern.length();) {
-        // If characters match, extend the prefix length
-        if (pattern[current] == pattern[prefixLength]) {
-            // Store the length of matching prefix
-            lps[current] = ++prefixLength;
-            current++;
-        }
-        // If characters don't match and we're not at the start of the
-        // pattern
-        else if (prefixLength != 0) {
-            // Backtrack to the previous longest prefix-suffix
-            prefixLength = lps[prefixLength - 1];
-        }
-        // If no match and no prefix to backtrack
-        else {
-            // No prefix-suffix match found
-            lps[current] = 0;
-            current++;
-        }
-    }
-
-    // Return the computed longest prefix-suffix array
-    return lps;
-}
-
-// {
-// vector<int> kmp(b.size() + 1),
-// idx(a.size() + 1),
-// st;
-// for (int i = 1, j = 0; i < b.size();)
-//     if (b[i] == b[j]) 
-//         kmp[++i] = ++j;
-//     else {
-//         i += j == 0;
-//         j = kmp[j];
-//     }
-// }
-
 class Solution_1 {
 public:
     string removeOccurrences(string s, string part)
     {
-        vector<int> prefix(size(part));     
+        vector<int> prefix(size(part));
         for (int index = 1, length = 0; index < size(prefix);)
             if (part[index] == part[length])
                 prefix[index++] = ++length;
@@ -64,44 +21,71 @@ public:
             else
                 index++;
 
-        vector<int> equal;
+        vector<int> match;
         string stack;
 
-        for (int index = 0, prefix_index = 0; index < size(s);)
+        for (char c : s)
         {
-            stack.push_back(s[index]);
-            if (stack.back() == part[prefix_index])
-            {
-                equal.push_back(prefix_index + 1);
-                index++;
-            }
-            else if (prefix_index)
-                prefix_index = prefix[prefix_index - 1];
-            else
-            {
-                equal.push_back(0);
-                index++;
-            }
+            auto length = match.empty() ? 0 : match.back();
 
-            if (size(part) == equal.back())
-                for (int i = equal.back(); i ; i--)
-                {
-                    stack.pop_back();
-                    equal.pop_back();
-                }
+            while (length && c != part[length])
+                   length = prefix[length - 1];
+
+            match.push_back(c == part[length] ? ++length : 0);
+            stack.push_back(c);
+
+            if (length == size(part))
+            {
+                stack.resize(stack.size() - size(part));
+                match.resize(match.size() - size(part));
+            }
         }
 
         return stack;
     }
 };
 
+class Solution_2 {
+    public:
+    string removeOccurrences(string s, string part)
+    {
+        vector<int> prefix(size(part));
+        for (int index = 1, length = 0; index < size(prefix);)
+            if (part[index] == part[length])
+                prefix[index++] = ++length;
+            else if (length)
+                length = prefix[length - 1];
+            else
+                index++;
+
+        vector<int> match(size(s));
+        auto begin = std::begin(match);
+
+        for (int first = 0, last = 0; last < size(s); last++)
+        {
+            auto c = s[last];
+            auto length = *begin;
+
+            while (length && c != part[length])
+                   length = prefix[length - 1];
+
+            *begin++ = c == part[length] ? ++length : 0;
+            s[first++] = c;
+
+            if (length == size(part))
+            {
+                begin -= size(part);
+                first -= size(part);
+            }
+        }
+
+        return s;
+    }
+};
+
 int main()
 {
-    Solution_1 sol;
-
-    string s5 = "cxdwzolfrccawvewcxdcxdwzolfrcccxdwzolfrccawvewkrawvewcxdwzolfrccawvewkrkccxdwzolfrccawvewkrxdwzolfcxdwzolfrccawvewkrrccacxdwzolfrcccxdwzolfrccawvewkrawvewkrwvewkrrwzolfrccxdwzolfrccawvewkrcawvewkrkryscxcxdwzolfrcxdwzolfrccawvewkrccawvewkrdwzolfrccawvewkrotfbdngngvfrj", part5 = "cxdwzolfrccawvewkr";
-    string result5 = sol.removeOccurrences(s5, part5);
-    cout << "result5: " << result5 << endl;    
+    Solution_2 sol;
 
     string s1 = "daabcbaabcbc", part1 = "abc";
     string result1 = sol.removeOccurrences(s1, part1);
@@ -117,5 +101,9 @@ int main()
 
     string s4 = "kpygkivtlqoockpygkivtlqoocssnextkqzjpycbylkaondsskpygkpygkivtlqoocssnextkqzjpkpygkivtlqoocssnextkqzjpycbylkaondsycbylkaondskivtlqoocssnextkqzjpycbylkaondssnextkqzjpycbylkaondshijzgaovndkjiiuwjtcpdpbkrfsi", part4 = "kpygkivtlqoocssnextkqzjpycbylkaonds";
     string result4 = sol.removeOccurrences(s4, part4);
-    cout << "result4: " << result4 << endl;    
+    cout << "result4: " << result4 << endl;
+    
+    string s5 = "cxdwzolfrccawvewcxdcxdwzolfrcccxdwzolfrccawvewkrawvewcxdwzolfrccawvewkrkccxdwzolfrccawvewkrxdwzolfcxdwzolfrccawvewkrrccacxdwzolfrcccxdwzolfrccawvewkrawvewkrwvewkrrwzolfrccxdwzolfrccawvewkrcawvewkrkryscxcxdwzolfrcxdwzolfrccawvewkrccawvewkrdwzolfrccawvewkrotfbdngngvfrj", part5 = "cxdwzolfrccawvewkr";
+    string result5 = sol.removeOccurrences(s5, part5);
+    cout << "result5: " << result5 << endl;   
 }
