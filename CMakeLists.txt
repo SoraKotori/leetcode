@@ -31,5 +31,6 @@ add_executable(167_Two_Sum_II_Input_Array_Is_Sorted "167. Two Sum II - Input Arr
 add_executable(15_3Sum "15. 3Sum.cpp")
 add_executable(2349_Design_a_Number_Container_System "2349. Design a Number Container System.cpp")
 add_executable(2364_Count_Number_of_Bad_Pairs "2364. Count Number of Bad Pairs.cpp")
+add_executable(1910_Remove_All_Occurrences_of_a_Substring "1910. Remove All Occurrences of a Substring.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
