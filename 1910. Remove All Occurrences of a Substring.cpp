@@ -58,27 +58,28 @@ class Solution_2 {
             else
                 index++;
 
-        vector<int> match(size(s));
-        auto begin = std::begin(match);
+        vector<int> match(size(s) + 1);
+        auto stack_top = begin(s);
+        auto match_top = begin(match);
 
-        for (int first = 0, last = 0; last < size(s); last++)
+        for (auto c : s)
         {
-            auto c = s[last];
-            auto length = *begin;
+            auto length = *match_top;
 
             while (length && c != part[length])
                    length = prefix[length - 1];
 
-            *begin++ = c == part[length] ? ++length : 0;
-            s[first++] = c;
+            *++match_top = c == part[length] ? ++length : 0;
+            *stack_top++ = c;
 
             if (length == size(part))
             {
-                begin -= size(part);
-                first -= size(part);
+                match_top -= size(part);
+                stack_top -= size(part);
             }
         }
 
+        s.erase(stack_top, end(s));
         return s;
     }
 };
