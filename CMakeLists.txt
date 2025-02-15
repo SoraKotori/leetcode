@@ -35,5 +35,6 @@ add_executable(1910_Remove_All_Occurrences_of_a_Substring "1910. Remove All Occu
 add_executable(2342_Max_Sum_of_a_Pair_With_Equal_Sum_of_Digits "2342. Max Sum of a Pair With Equal Sum of Digits.cpp")
 add_executable(239_Sliding_Window_Maximum "239. Sliding Window Maximum.cpp")
 add_executable(76_Minimum_Window_Substring "76. Minimum Window Substring.cpp")
+add_executable(2698_Find_the_Punishment_Number_of_an_Integer "2698. Find the Punishment Number of an Integer.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
