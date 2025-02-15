@@ -33,8 +33,9 @@ public:
     int punishmentNumber(int n) {
         int sum = 0;
         for (int i = 1; i <= n; i++)
-            if (int square = i * i; CanPartition(square, i))
-                sum += square;
+            if (i % 9 < 2) // x ^ 2 ≡ x (mod9), x(x - 1) ≡ 0 (mod9), x = 0 or x = 1
+                if (int square = i * i; CanPartition(square, i))
+                    sum += square;
         return sum;
     }
 };
