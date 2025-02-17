@@ -19,9 +19,15 @@
 // -10 <= nums[i] <= 10
 
 class Solution {
+    void gen(vector<vector<int>>& result, const vector<int>& nums, vector<int> vec)
+    {
+        vec
+    }
 public:
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        
+        vector<vector<int>> result;
+        gen(result, nums, {});
+        return result;
     }
 };
 
