@@ -36,5 +36,8 @@ add_executable(2342_Max_Sum_of_a_Pair_With_Equal_Sum_of_Digits "2342. Max Sum of
 add_executable(239_Sliding_Window_Maximum "239. Sliding Window Maximum.cpp")
 add_executable(76_Minimum_Window_Substring "76. Minimum Window Substring.cpp")
 add_executable(2698_Find_the_Punishment_Number_of_an_Integer "2698. Find the Punishment Number of an Integer.cpp")
+add_executable(1079_Letter_Tile_Possibilities "1079. Letter Tile Possibilities.cpp")
+add_executable(78_Subsets "78. Subsets.cpp")
+add_executable(90_Subsets_II "90. Subsets II.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)

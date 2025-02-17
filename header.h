@@ -23,3 +23,18 @@ auto print_1D(const R& r)
     ranges::copy(r, ostream_iterator<ElementType>(std::cout, " "));
     cout << endl;
 }
+
+template <std::ranges::range R>
+auto print_2D_line(const R& r)
+{
+    using ElementType = std::ranges::range_value_t<R>;
+
+    cout << '[';
+    for (const auto r2 : r)
+    {
+        cout << '[';
+        ranges::copy(r2, ostream_iterator<std::ranges::range_value_t<ElementType>>(std::cout, " "));
+        cout << ']';
+    }
+    cout << ']' << endl;
+}
