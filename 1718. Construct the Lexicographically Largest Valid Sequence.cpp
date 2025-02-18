@@ -27,7 +27,7 @@
 class Solution {
     vector<int> result;
 
-    bool gen(vector<int> current, deque<int> other, int curr_i)
+    bool gen(vector<int> current, vector<int>& other, int curr_i)
     {
         if (curr_i == size(current))
         {
@@ -36,36 +36,36 @@ class Solution {
         }
         else if (current[curr_i])
         {
-            if (gen(current, other, curr_i + 1));
+            if (gen(current, other, curr_i + 1))
                 return true;
         }
 
         for (int i = 0; i < size(other); i++)
         {
-            int num = other[i];
+            if (other[i])
+                continue;
+            int num = size(other) - i;
+            other[i] = true;
             if (num == 1)
             {
                 auto new_current = current;
-                auto new_other = other;                
                 new_current[curr_i] = num;
-                new_other.erase(begin(new_other) + i);
-                if (gen(new_current, new_other, curr_i + 1));
+                if (gen(new_current, other, curr_i + 1))
                     return true;
             }
             else
             {
                 int curr_j = curr_i + num;
-                if (curr_j >= size(current) || current[curr_j])
-                    continue;
-
-                auto new_current = current;
-                auto new_other = other;
-                new_current[curr_i] = num;
-                new_current[curr_j] = num;
-                new_other.erase(begin(new_other) + i);
-                if (gen(new_current, new_other, curr_i + 1));
-                    return true;
+                if (curr_j < size(current) && current[curr_j] == 0)
+                {
+                    auto new_current = current;
+                    new_current[curr_i] = num;
+                    new_current[curr_j] = num;
+                    if (gen(new_current, other, curr_i + 1))
+                        return true;
+                }
             }
+            other[i] = false;
         }
 
         return false;
@@ -73,9 +73,7 @@ class Solution {
 public:
     vector<int> constructDistancedSequence(int n) {
 
-        deque<int> other(n);
-        for (int i = 0; i < n; i++)
-            other[i] = n - i;
+        vector<int> other(n);
 
         gen(vector<int>(n * 2 - 1), other, 0);
         return result;
@@ -86,7 +84,8 @@ int main()
 {
     Solution sol;
 
-    // print_1D(sol.constructDistancedSequence(3));
+    print_1D(sol.constructDistancedSequence(3));
     print_1D(sol.constructDistancedSequence(5));
     print_1D(sol.constructDistancedSequence(7));
+    print_1D(sol.constructDistancedSequence(17));
 }
