@@ -25,54 +25,37 @@
 // 1 <= n <= 20
 
 class Solution {
-    vector<int> result;
-
-    bool gen(vector<int>& current, vector<int>& other, int curr_i)
+    bool backtrack(vector<int>& result, vector<int>& used, int index)
     {
-        if (curr_i == size(current))
-        {
-            result = current;
+        if (index == size(result))
             return true;
-        }
 
-        if (current[curr_i])
+        if (result[index])
+            return backtrack(result, used, index + 1);
+
+        for (int number = size(used) - 1; number; number--)
         {
-            return gen(current, other, curr_i + 1);
-
-            // if (gen(current, other, curr_i + 1))
-            //     return true;
-        }
-
-        for (int i = 0; i < size(other); i++)
-        {
-            if (other[i])
+            if (used[number])
                 continue;
-            int num = size(other) - i;
 
-            other[i] = true;
-            current[curr_i] = num;
-            if (num == 1)
+            used[number] = true;
+            result[index] = number;
+            if (number == 1)
             {
-                if (gen(current, other, curr_i + 1))
-                    return true;
+                if (backtrack(result, used, index + 1)) return true;
             }
             else
             {
-                int curr_j = curr_i + num;
-                if (curr_j < size(current) && current[curr_j] == 0)
+                int second = index + number;
+                if (second < size(result) && result[second] == 0)
                 {
-                    // auto new_current = current;
-                    // new_current[curr_j] = num;
-                    current[curr_j] = num;
-
-                    if (gen(current, other, curr_i + 1))
-                        return true;
-
-                    current[curr_j] = 0;
+                    result[second] = number;
+                    if (backtrack(result, used, index + 1)) return true;
+                    result[second] = 0;
                 }
             }
-            current[curr_i] = 0;
-            other[i] = false;
+            result[index] = 0;
+            used[number] = false;
         }
 
         return false;
@@ -80,10 +63,10 @@ class Solution {
 public:
     vector<int> constructDistancedSequence(int n) {
 
-        vector<int> other(n);
-        vector<int> current(n * 2 - 1);
+        vector<int> used(n + 1);
+        vector<int> result(n * 2 - 1);
 
-        gen(current, other, 0);
+        backtrack(result, used, 0);
         return result;
     }
 };
