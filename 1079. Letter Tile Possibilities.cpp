@@ -45,7 +45,7 @@ public:
     }
 };
 
-class Solution {
+class Solution_1 {
 public:
     int numTilePossibilities(string tiles) {
         unordered_set<string> sequences;
@@ -75,7 +75,7 @@ private:
     }
 };
 
-class Solution {
+class Solution_2 {
 public:
     int numTilePossibilities(string tiles) {
         // Track frequency of each uppercase letter (A-Z)
@@ -109,7 +109,7 @@ private:
     }
 };
 
-class Solution_2 {
+class Solution_3 {
 public:
     int numTilePossibilities(string tiles) {
         unordered_set<string> seen;
