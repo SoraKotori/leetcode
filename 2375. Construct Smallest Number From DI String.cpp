@@ -32,13 +32,69 @@
 // pattern consists of only the letters 'I' and 'D'.
 
 class Solution {
+    string result;
+    std::array<bool, 10> array{};
+
+    bool gen(string& pattern, string nums, int pattern_i)
+    {   
+        if (pattern_i == size(pattern))
+        {
+            result = nums;
+            return true;
+        }
+
+        if ('I' == pattern[pattern_i])
+        {
+            for (char c = nums.back() + 1; c <= '9'; c++)
+            {
+                if (array[c - '0'] == false)
+                {
+                    array[c - '0'] = true;
+                    nums.push_back(c);
+                    if (gen(pattern, nums, pattern_i + 1))
+                        return true;
+                    nums.pop_back();
+                    array[c - '0'] = false;
+                }
+            }
+        }
+        else
+        {
+            for (char c = nums.back() - 1; c >= '1'; c--)
+            {
+                if (array[c - '0'] == false)
+                {
+                    array[c - '0'] = true;
+                    nums.push_back(c);
+                    if (gen(pattern, nums, pattern_i + 1))
+                        return true;
+                    nums.pop_back();
+                    array[c - '0'] = false;
+                }                
+            }
+        }
+
+        return false;
+    }
 public:
     string smallestNumber(string pattern) {
         
+        for (int i = 1; i <= 9; i++)
+        {
+            array[i] = true;
+            if (gen(pattern, to_string(i), 0))
+                return result;
+            array[i] = false;
+        }
+
+        return "";
     }
 };
 
 int main()
 {
-    
+    Solution sol;
+
+    cout << sol.smallestNumber("IIIDIDDD") << endl;
+    cout << sol.smallestNumber("DDD") << endl;
 }
