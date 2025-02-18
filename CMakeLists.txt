@@ -40,5 +40,6 @@ add_executable(1079_Letter_Tile_Possibilities "1079. Letter Tile Possibilities.c
 add_executable(78_Subsets "78. Subsets.cpp")
 add_executable(90_Subsets_II "90. Subsets II.cpp")
 add_executable(2375_Construct_Smallest_Number_From_DI_String "2375. Construct Smallest Number From DI String.cpp")
+add_executable(46_Permutations "46. Permutations.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
