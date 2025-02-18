@@ -19,19 +19,32 @@
 // -10 <= nums[i] <= 10
 
 class Solution {
-    void gen(vector<vector<int>>& result, const vector<int>& nums, vector<int> vec)
+    void gen(vector<vector<int>>& result, const vector<int>& nums, vector<int> vec, int start)
     {
-        vec
+        result.push_back(vec);
+
+        vec.resize(size(vec) + 1);
+        for (int i = start; i < size(nums);)
+        {
+            vec.back() = nums[i];
+            gen(result, nums, vec, i + 1);
+            while (++i < size(nums) && vec.back() == nums[i]);
+        }
     }
 public:
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    vector<vector<int>> subsetsWithDup(vector<int>&& nums) {
         vector<vector<int>> result;
-        gen(result, nums, {});
+        sort(begin(nums), end(nums));
+        gen(result, nums, {}, 0);
         return result;
     }
 };
 
 int main()
 {
+    Solution sol;
 
+    print_2D_line(sol.subsetsWithDup({1,2,2}));
+    print_2D_line(sol.subsetsWithDup({0}));
+    print_2D_line(sol.subsetsWithDup({4,4,4,1,4}));
 }

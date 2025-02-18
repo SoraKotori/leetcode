@@ -89,7 +89,7 @@ public:
 
 int main()
 {
-    Solution_1 sol;
+    Solution sol;
 
     print_2D_line(sol.subsets({1,2,3}));
     print_2D_line(sol.subsets({0}));
