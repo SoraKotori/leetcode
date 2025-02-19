@@ -42,5 +42,6 @@ add_executable(90_Subsets_II "90. Subsets II.cpp")
 add_executable(2375_Construct_Smallest_Number_From_DI_String "2375. Construct Smallest Number From DI String.cpp")
 add_executable(46_Permutations "46. Permutations.cpp")
 add_executable(1718_Construct_the_Lexicographically_Largest_Valid_Sequence "1718. Construct the Lexicographically Largest Valid Sequence.cpp")
+add_executable(1415_The_k-th_Lexicographical_String_of_All_Happy_Strings_of_Length_n "1415. The k-th Lexicographical String of All Happy Strings of Length n.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
