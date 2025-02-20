@@ -61,14 +61,33 @@ public:
 class Solution_3 {
 public:
     string getHappyString(int n, int k) {
+
         string result;
+        while (--n)
+        {
+            int size = 1 << n;
+            if (k < size)
+            {
+                result.push_back('a');
+            }
+            else if (k < 2 * size)
+            {
+                result.push_back('b');
+                k -= size;
+            }
+            else
+            {
+                result.push_back('c');
+                k -= 2 * size;
+            }
+        }
         return result;
     }
 };
 
 int main()
 {
-    Solution_2 sol;
+    Solution_3 sol;
 
     cout << sol.getHappyString(1, 3) << endl;
     cout << sol.getHappyString(1, 4) << endl;
