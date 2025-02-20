@@ -1,15 +1,13 @@
 #include "header.h"
 
 class Solution {
-    array<char, 3> nums = {'a', 'b', 'c'};
-
     bool backtrack(string& result, int n, int& k)
     {
         if (size(result) == n)
             return --k == 0;
 
         char back = size(result) ? result.back() : 0;
-        for (auto c : nums)
+        for (auto c : {'a', 'b', 'c'})
         {
             if (back != c)
             {
@@ -58,28 +56,43 @@ public:
     }
 };
 
+// 3 * 2 * 2
+// aba
+// abc
+// aca
+// acb
+// bab
+// bac
+// bca
+// bcb
+// cab
+// cac
+// cba
+// cbc
 class Solution_3 {
 public:
     string getHappyString(int n, int k) {
 
-        string result;
-        while (--n)
+        int size = 1 << --n; // size = 2 ^ (n - 1)
+        if (size * 3 <= --k) // k is index
+            return "";
+
+        string result(1, 'a' + k / size);
+
+        
+        // 100
+        // 010
+        while (size /= 2) // size /= 2 need > 0
         {
-            int size = 1 << n;
+            k %= size * 2;
             if (k < size)
-            {
-                result.push_back('a');
-            }
-            else if (k < 2 * size)
-            {
-                result.push_back('b');
-                k -= size;
-            }
+                result.push_back('a' + (result.back() == 'a'));
             else
-            {
-                result.push_back('c');
-                k -= 2 * size;
-            }
+                result.push_back('c' - (result.back() == 'c'));
+            // if (k < size)
+            //     result.push_back(result.back() == 'a' ? 'b' : 'a');
+            // else
+            //     result.push_back(result.back() == 'c' ? 'b' : 'c');
         }
         return result;
     }
@@ -89,7 +102,8 @@ int main()
 {
     Solution_3 sol;
 
-    cout << sol.getHappyString(1, 3) << endl;
-    cout << sol.getHappyString(1, 4) << endl;
-    cout << sol.getHappyString(3, 9) << endl;
+    cout << sol.getHappyString(1, 3) << endl; // c
+    cout << sol.getHappyString(1, 4) << endl; // ""
+    cout << sol.getHappyString(3, 9) << endl; // cab
+    cout << sol.getHappyString(10, 100) << endl; // "abacbabacb"
 }

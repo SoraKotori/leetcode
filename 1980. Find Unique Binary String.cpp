@@ -64,9 +64,7 @@ public:
             set.insert(stoi(num, nullptr, 2));
 
         int i = 0;
-        for (; i < size(nums); i++)
-            if (set.count(i) == 0)
-                break;
+        for (; i < size(nums) && set.count(i); i++);
 
         return format("{:0{}b}", i, size(nums));
     }
@@ -83,7 +81,7 @@ public:
 };
 int main()
 {
-    Solution_4 sol;
+    Solution_3 sol;
 
     cout << sol.findDifferentBinaryString({"01","10"}) << endl;
     cout << sol.findDifferentBinaryString({"00","01"}) << endl;
