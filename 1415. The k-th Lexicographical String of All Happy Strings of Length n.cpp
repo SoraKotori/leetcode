@@ -98,10 +98,25 @@ public:
     }
 };
 
+class Solution_4 {
+public:
+    string getHappyString(int n, int k) {
+        if (--k >> --n >= 3)
+            return "";
+
+        string str(n + 1, 'a' + (k >> n));
+        for (auto first = begin(str); n--; first++)
+            *(first + 1) = k & (1 << n) ? 'c' - (*first == 'c')
+                                        : 'a' + (*first == 'a');
+        return str;
+    }
+};
+
 int main()
 {
-    Solution_3 sol;
+    Solution_4 sol;
 
+    cout << sol.getHappyString(2, 7) << endl; // ""
     cout << sol.getHappyString(1, 3) << endl; // c
     cout << sol.getHappyString(1, 4) << endl; // ""
     cout << sol.getHappyString(3, 9) << endl; // cab
