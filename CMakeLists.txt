@@ -4,6 +4,8 @@ project(leetcode)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC")
 
 add_executable(189_Rotate_Array "189. Rotate Array.cpp")
 add_executable(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid "1368. Minimum Cost to Make at Least One Valid Path in a Grid.cpp")
@@ -45,5 +47,6 @@ add_executable(1718_Construct_the_Lexicographically_Largest_Valid_Sequence "1718
 add_executable(1415_The_k-th_Lexicographical_String_of_All_Happy_Strings_of_Length_n "1415. The k-th Lexicographical String of All Happy Strings of Length n.cpp")
 add_executable(1980_Find_Unique_Binary_String "1980. Find Unique Binary String.cpp")
 add_executable(1261_Find_Elements_in_a_Contaminated_Binary_Tree "1261. Find Elements in a Contaminated Binary Tree.cpp")
+add_executable(1028_Recover_a_Tree_From_Preorder_Traversal "1028. Recover a Tree From Preorder Traversal.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
