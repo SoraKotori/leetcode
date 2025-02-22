@@ -70,7 +70,8 @@ public:
                 vec[depth] = node;
 
             if (depth)
-                (vec[depth - 1]->left ? vec[depth - 1]->right : vec[depth - 1]->left) = node;
+                (vec[depth - 1]->left ? vec[depth - 1]->right
+                                      : vec[depth - 1]->left) = node;
         }
         return vec[0];
     }

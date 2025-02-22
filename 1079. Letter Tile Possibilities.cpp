@@ -23,28 +23,6 @@
 // 1 <= tiles.length <= 7
 // tiles consists of uppercase English letters.
 
-class Solution {
-    int gen(string other)
-    {
-        int total = 0;
-        for (auto chunk : other | views::chunk_by(equal_to{}))
-        {
-            total++;
-            auto str = other;
-            str.erase(chunk.begin() - other.begin(), 1);
-            total += gen(str);
-        }
-
-        return total;
-    }
-
-public:
-    int numTilePossibilities(string tiles) {
-        sort(begin(tiles), end(tiles));
-        return gen(tiles);
-    }
-};
-
 class Solution_1 {
 public:
     int numTilePossibilities(string tiles) {
@@ -167,13 +145,158 @@ private:
     }
 };
 
+class Solution_4 {
+    int gen(string other)
+    {
+        int total = 0;
+        for (auto chunk : other | views::chunk_by(equal_to{}))
+        {
+            total++;
+            auto str = other;
+            str.erase(chunk.begin() - other.begin(), 1);
+            total += gen(str);
+        }
+
+        return total;
+    }
+
+public:
+    int numTilePossibilities(string tiles) {
+        sort(begin(tiles), end(tiles));
+        return gen(tiles);
+    }
+};
+
+class Solution_5 {
+    using array_t = array<int, 26>;
+    int backtrack(array_t& array, vector<int>& factorial, int size, int start)
+    {
+        auto total = factorial[size];
+        auto sub_total = 0;
+        for (auto i = 0; i < 26; i++)
+        {
+            auto& count = array[i];
+            if (count == 0)
+                continue;
+            
+            total /= factorial[count];
+
+            if (start <= i)
+            {
+                count--;
+                sub_total += backtrack(array, factorial, size - 1, i);
+                count++;
+            }
+        }
+        cout << "total:" << total << " sub_total:" << sub_total << endl;
+        return total + sub_total;
+    }
+public:
+    int numTilePossibilities(string tiles) {
+        array_t array{};
+        vector<int> factorial(size(tiles) + 1);
+
+        for (auto c : tiles)
+            array[c - 'A']++;
+
+        for (auto i = 1, n = 1; i <= size(tiles); i++)
+            factorial[i] = n *= i;
+        
+        return backtrack(array, factorial, size(tiles), 0);
+    }
+};
+
+// A2 B1
+// A1 B1
+// B1
+// A1
+// A2
+
+// AAB 3! / 2! = 3      AAB ABA BAA
+//  AB 2! = 2            AB BA
+//   B = 1                B
+//  A  = 1                A
+// AA   2! / 2! = 1       AA
+//  A
+
+class Solution_6 {
+    using array_t = array<int, 26>;
+    int backtrack(const array_t& array, const vector<int>& factorial, int index, int size, int repeat)
+    {
+        if (index == array.size())
+            return factorial[size] / repeat;
+
+        auto num = backtrack(array, factorial, index + 1, size, repeat); // i = 0
+        for (int i = 1; i <= array[index]; i++)
+            num += backtrack(array, factorial, index + 1, size + i, repeat * factorial[i]);
+        return num; 
+    }
+public:
+    int numTilePossibilities(string tiles) {
+        array_t array{};
+        vector<int> factorial(size(tiles) + 1);
+
+        for (auto c : tiles)
+            array[c - 'A']++;
+
+        for (auto i = 1, n = 1; i <= size(tiles); i++)
+            factorial[i] = n *= i;
+        
+        return backtrack(array, factorial, 0, 0, 1);
+    }
+};
+
+static int cc = 0;
+class Solution {
+public:
+    int numTilePossibilities(string tiles) {
+        int ans = 0;
+        
+        array<int, 26> freq = {};
+        for (char c : tiles)
+            freq[c - 'A']++;
+
+        array<int, 8> fac = {1};
+        for (int n = 1; n < fac.size(); n++)
+            fac[n] = n * fac[n-1];
+
+        auto C = [&](int n, int k) -> int {
+            // assert(k <= n);
+            return fac[n] / (fac[k] * fac[n - k]);
+        };
+
+        vector<array<int, 26>> dp(tiles.size() + 1);
+        ranges::fill(ranges::join_view(dp), -1);
+
+        auto dfs = [&](this const auto &self, int pos, int spaces) -> int {
+            if (pos >= freq.size())
+                return spaces == 0;
+
+            if (dp[spaces][pos] != -1)
+                return dp[spaces][pos];
+
+            int res = 0;
+
+            for (int use = 0; use <= min(spaces, freq[pos]); use++)
+                res += C(spaces, use) * self(pos + 1, spaces - use);
+
+            cout << cc++ << endl;
+            return dp[spaces][pos] = res;
+        };
+
+        for (int spaces = 1; spaces <= tiles.size(); spaces++)
+            ans += dfs(0, spaces);
+
+        return ans;
+    }
+};
+
 int main()
 {
     Solution sol;
 
-    cout << sol.numTilePossibilities("AAB") << endl;
+    // cout << sol.numTilePossibilities("AAB") << endl;
     cout << sol.numTilePossibilities("AAABBC") << endl;
-    cout << sol.numTilePossibilities("V") << endl;
-    cout << sol.numTilePossibilities("CDC") << endl;
-    
+    // cout << sol.numTilePossibilities("V") << endl;
+    // cout << sol.numTilePossibilities("CDC") << endl;
 }
