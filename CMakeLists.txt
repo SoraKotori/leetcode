@@ -48,5 +48,6 @@ add_executable(1415_The_k-th_Lexicographical_String_of_All_Happy_Strings_of_Leng
 add_executable(1980_Find_Unique_Binary_String "1980. Find Unique Binary String.cpp")
 add_executable(1261_Find_Elements_in_a_Contaminated_Binary_Tree "1261. Find Elements in a Contaminated Binary Tree.cpp")
 add_executable(1028_Recover_a_Tree_From_Preorder_Traversal "1028. Recover a Tree From Preorder Traversal.cpp")
+add_executable(3463_Check_If_Digits_Are_Equal_in_String_After_Operations_II "3463. Check If Digits Are Equal in String After Operations II.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)

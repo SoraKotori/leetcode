@@ -31,7 +31,7 @@
 // 1 <= pattern.length <= 8
 // pattern consists of only the letters 'I' and 'D'.
 
-class Solution {
+class Solution_1 {
     string result;
     std::array<bool, 10> array{};
 
@@ -91,10 +91,83 @@ public:
     }
 };
 
+// IDIDIDID
+// 132547698
+class Solution_2 {
+public:
+    string smallestNumber(string pattern) {
+        auto n = size(pattern);
+
+        vector<char> prefix(size(pattern));
+        for (int i = 0, D_count = 0; i < n; i++)
+            prefix[i] = pattern[i] == 'D' ? ++D_count : D_count;
+
+        string result(size(pattern) + 1, '0');
+
+        auto small = '1';
+        auto pre_D = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (pattern[i] == 'D')
+                continue;
+
+            result[i] = small++;
+            for (auto diff = prefix[i] - pre_D, j = 1; j <= diff; j++)
+            {
+                result[i - j] = small++;
+            }
+
+            pre_D = prefix[i];
+        }
+
+        for (auto diff = prefix[n - 1] - pre_D, j = 0; j <= diff; j++)
+        {
+            result[n - j] = small++;
+        }
+
+        return result;
+    }
+};
+
+class Solution {
+public:
+    string smallestNumber(string pattern) {
+        vector<int> prefix(size(pattern));
+        string result(size(pattern) + 1, '0');
+
+        for (int n = 0, i = size(pattern); i--;)
+            prefix[i] = pattern[i] == 'D' ? ++n : (n = 0);
+
+        auto d_max = 0;
+        auto current_max = '1';
+        for (int i = 0; i < size(pattern); i++)
+        {
+            if (pattern[i] == 'I')
+            {
+                result[i] = current_max++;
+                if (d_max)
+                {
+                    current_max += d_max;
+                    d_max = 0;
+                }
+            }
+            else
+            {
+                result[i] = current_max + prefix[i];
+                if (d_max == 0)
+                    d_max = prefix[i];
+            }
+        }
+        result.back() = current_max;
+        return result;
+    }
+};
+
 int main()
 {
     Solution sol;
 
     cout << sol.smallestNumber("IIIDIDDD") << endl;
     cout << sol.smallestNumber("DDD") << endl;
+    cout << sol.smallestNumber("DDDIII") << endl;
 }
