@@ -23,29 +23,41 @@
 // 1 <= nums.length <= 10^5
 // -10^4 <= nums[i] <= 10^4
 
+class Solution_1 {
+public:
+    int maxAbsoluteSum(vector<int>& nums) {
+        int max = nums.front();
+        int min = nums.front();
+        int sum_max = 0;
+        int sum_min = 0;
+
+        for (auto num : nums)
+        {
+            sum_max = std::max(sum_max + num, num);
+            sum_min = std::min(sum_min + num, num);
+            max = std::max(max, sum_max);
+            min = std::min(min, sum_min);
+        }
+
+        return std::max(max, -min);
+    }
+};
+
 class Solution {
 public:
     int maxAbsoluteSum(vector<int>& nums) {
-
-        int best_max = numeric_limits<int>::min();
-        int current_sum = 0;
-
-        for (auto num : nums)
-        {
-            current_sum = max(current_sum + num, num);
-            best_max = max(best_max, current_sum);
-        }
-
-        int best_min = numeric_limits<int>::max();
-        current_sum = 0;
+        int sum = 0;
+        int sum_min = 0;
+        int sum_max = 0;
 
         for (auto num : nums)
         {
-            current_sum = min(current_sum + num, num);
-            best_min = min(best_min, current_sum);
+            sum += num;
+            sum_min = min(sum_min, sum);
+            sum_max = max(sum_max, sum);
         }
 
-        return max(best_max, -best_min);
+        return sum_max - sum_min;
     }
 };
 
