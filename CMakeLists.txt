@@ -53,5 +53,6 @@ add_executable(889_Construct_Binary_Tree_from_Preorder_and_Postorder_Traversal "
 add_executable(2467_Most_Profitable_Path_in_a_Tree "2467. Most Profitable Path in a Tree.cpp")
 add_executable(1524_Number_of_Sub-arrays_With_Odd_Sum "1524. Number of Sub-arrays With Odd Sum.cpp")
 add_executable(1749_Maximum_Absolute_Sum_of_Any_Subarray "1749. Maximum Absolute Sum of Any Subarray.cpp")
+add_executable(873_Length_of_Longest_Fibonacci_Subsequence "873. Length of Longest Fibonacci Subsequence.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
