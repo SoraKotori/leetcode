@@ -33,7 +33,7 @@ class Solution_1 {
     void backtrack(vector<int>& arr, int arr_index, int sum, int& number)
     {
         if (sum % 2)
-            number = (number + 1) % 1'000'000'000;
+            number = (number + 1) % 1'000'000'007;
 
         if (arr_index == size(arr))
             return;
@@ -78,46 +78,97 @@ public:
     }
 };
 
-class Solution {
+class Solution_3 {
 public:
     int numOfSubarrays(vector<int>& arr) {
-        int prefix = 0;
 
         int odds = 0;
         int evens = 0;
 
-        int num = 0;
-        for (int i = 0; i < size(arr); i++)
+        int odd_sum = 0;
+        for (int num : arr)
         {
-            prefix = (prefix + arr[i] % 2) % 2;
-            if (arr[i])
+            if (num % 2)
             {
-                num += odds;
-                evens++;
+                swap(odds, evens);
+                odds = (odds + 1) % 1'000'000'007;
             }
             else
-            {
-
-            }
+                evens = (evens + 1) % 1'000'000'007;
+            odd_sum = (odd_sum + odds) % 1'000'000'007;
         }
 
-        return num;
+        return odd_sum;
     }
 };
+
+class Solution_4 {
+public:
+    int numOfSubarrays(vector<int>& arr) {
+        const int MOD = 1e9 + 7;
+        int count = 0, prefixSum = 0;
+        // evenCount starts as 1 since the initial sum (0) is even
+        int oddCount = 0, evenCount = 1;
+
+        for (int num : arr) {
+            prefixSum += num;
+            // If current prefix sum is even, add the number of odd subarrays
+            if (prefixSum % 2 == 0) {
+                count += oddCount; // 因為 prefixSum 為偶數，所以要讓找奇數的子陣列來減掉前綴和，才會得到奇數的子陣列
+                                   // 若有 oddCount 個奇數子陣列，則每個子陣列減掉前綴和後，總共可以得到 oddCount 個奇數的子陣列
+                evenCount++;
+            } else {
+                // If current prefix sum is odd, add the number of even
+                // subarrays
+                count += evenCount; // prefixSum 為奇數時，需要找到偶數的子陣列來減掉前綴和，才可以得到奇數的子陣列
+                oddCount++;
+            }
+
+            count %= MOD;  // To handle large results
+        }
+
+        return count;
+    }
+};
+
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr) {
+        long long oddCount = 0, prefixSum = 0;
+        for(int a : arr) {
+            prefixSum += a;
+            oddCount += prefixSum % 2;
+        }
+        oddCount += (arr.size() - oddCount) * oddCount; // arr.size() - oddCount 等於 evenCount
+                                                        // 偶數的前綴和可以和一個奇數的前綴和相減\差集可以得到一個奇數的子陣列
+                                                        // e.g. [1,2,3,4,5,6,7] 和 [1] 可以得到 [2,3,4,5,6,7]
+                                                        // e.g. [1,2,3,4,5,6,7] 和 [1,2] 可以得到 [3,4,5,6,7]
+                                                        // e.g. [1,2,3,4,5,6,7] 和 [1,2,3,4,5] 可以得到 [6,7]
+                                                        // e.g. [1,2,3,4,5,6,7] 和 [1,2,3,4,5,6] 可以得到 [7]
+                                                        // e.g. [1,2,3,4] 和 [1] 可以得到 [2,3,4]
+                                                        // e.g. [1,2,3,4] 和 [1,2] 可以得到 [3,4]
+                                                        // e.g. [1,2,3,4] 和 [1,2,3,4,5] 可以得到 [5]
+                                                        // e.g. [1,2,3,4] 和 [1,2,3,4,5,6] 可以得到 [5,6]
+                                                        // 總共有 evenCount 的偶數前綴和，和 oddCount 的奇數前綴和
+                                                        // 相成獲得總共的奇數的子陣列
+        return oddCount % 1'000'000'007;
+    }
+};
+
 int main()
 {
-    Solution sol;
+    Solution_4 sol;
 
     {
-        vector<int> arr = {1,3,5};
+        vector<int> arr = {1,3,5}; // 4
         cout << sol.numOfSubarrays(arr) << endl;
     }
     {
-        vector<int> arr = {2,4,6};
+        vector<int> arr = {2,4,6}; // 0
         cout << sol.numOfSubarrays(arr) << endl;
     }
     {
-        vector<int> arr = {1,2,3,4,5,6,7};
+        vector<int> arr = {1,2,3,4,5,6,7}; // 16
         cout << sol.numOfSubarrays(arr) << endl;
     }
 }
