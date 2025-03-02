@@ -50,7 +50,7 @@
 // amount.length == n
 // amount[i] is an even integer in the range [-104, 104].
 
-class Solution {
+class Solution_1 {
 public:
     int mostProfitablePath(vector<vector<int>>& edges, int bob, vector<int>& amount) {
 
@@ -126,6 +126,40 @@ public:
     }
 };
 
+class Solution {
+public:
+    pair<int, int> dfs(const vector<vector<int>>& adjacents, vector<int>& amount, int bob, int source, int parent, int depth)
+    {
+        int distance = source == bob ? 0 : size(amount);
+        int income = source && size(adjacents[source]) == 1 ? 0 : numeric_limits<int>::min();
+
+        for (auto adjacent : adjacents[source])
+            if (adjacent != parent)
+            {
+                auto [child_income, bob_distance] = dfs(adjacents, amount, bob, adjacent, source, depth + 1);
+                income = max(income, child_income);
+                distance = min(distance, bob_distance);
+            }
+
+        if      (depth <  distance) income += amount[source];
+        else if (depth == distance) income += amount[source] / 2;
+
+        return make_pair(income, distance + 1);
+    }
+
+    int mostProfitablePath(vector<vector<int>>& edges, int bob, vector<int>& amount) {
+
+        vector<vector<int>> adjacents(size(amount));
+        for (const auto& edge : edges)
+        {
+            adjacents[edge[0]].push_back(edge[1]);
+            adjacents[edge[1]].push_back(edge[0]);
+        }
+
+        return dfs(adjacents, amount, bob, 0, 0, 0).first;
+    }
+};
+
 int main() {
     {
         vector<vector<int>> edges = {{0, 1}, {1, 2}, {1, 3}, {3, 4}};
@@ -164,14 +198,21 @@ int main() {
     }
 
     {
-        // 0-6-4
-        // 0-2-5-1-3
         vector<vector<int>> edges = {{0,2},{0,6},{1,3},{1,5},{2,5},{4,6}};
         int bob = 6;
         vector<int> amount = {8838,-6396,-5940,2694,-1366,4616,2966};
         Solution sol;
         int result = sol.mostProfitablePath(edges, bob, amount);
         cout << "測試案例 5：預期輸出 = 7472, 實際輸出 = " << result << endl;
+    }
+
+    {
+        vector<vector<int>> edges = {{0,2},{1,4},{1,6},{2,4},{3,6},{3,7},{5,7}};
+        int bob = 4;
+        vector<int> amount = {-6896,-1216,-1208,-1108,1606,-7704,-9212,-8258};
+        Solution sol;
+        int result = sol.mostProfitablePath(edges, bob, amount);
+        cout << "測試案例 6：預期輸出 = -34998, 實際輸出 = " << result << endl;
     }
 
     return 0;
