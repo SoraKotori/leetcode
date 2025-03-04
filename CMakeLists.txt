@@ -57,5 +57,6 @@ add_executable(873_Length_of_Longest_Fibonacci_Subsequence "873. Length of Longe
 add_executable(1143_Longest_Common_Subsequence "1143. Longest Common Subsequence.cpp")
 add_executable(1092_Shortest_Common_Supersequence "1092. Shortest Common Supersequence.cpp")
 add_executable(2161_Partition_Array_According_to_Given_Pivot "2161. Partition Array According to Given Pivot.cpp")
+add_executable(1780_Check_if_Number_is_a_Sum_of_Powers_of_Three "1780. Check if_Number is a Sum of Powers of Three.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
