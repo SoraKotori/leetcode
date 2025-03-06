@@ -59,5 +59,6 @@ add_executable(1092_Shortest_Common_Supersequence "1092. Shortest Common Superse
 add_executable(2161_Partition_Array_According_to_Given_Pivot "2161. Partition Array According to Given Pivot.cpp")
 add_executable(1780_Check_if_Number_is_a_Sum_of_Powers_of_Three "1780. Check if_Number is a Sum of Powers of Three.cpp") # 不能有關鍵字 if，不然 gdb 會無法設中斷點
 add_executable(2579_Count_Total_Number_of_Colored_Cells "2579. Count Total Number of Colored Cells.cpp")
+add_executable(2965_Find_Missing_and_Repeated_Values "2965. Find Missing and Repeated Values.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
