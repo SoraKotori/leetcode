@@ -61,5 +61,6 @@ add_executable(1780_Check_if_Number_is_a_Sum_of_Powers_of_Three "1780. Check if_
 add_executable(2579_Count_Total_Number_of_Colored_Cells "2579. Count Total Number of Colored Cells.cpp")
 add_executable(2965_Find_Missing_and_Repeated_Values "2965. Find Missing and Repeated Values.cpp")
 add_executable(1358_Number_of_Substrings_Containing_All_Three_Characters "1358. Number of Substrings Containing All Three Characters.cpp")
+add_executable(2529_Maximum_Count_of_Positive_Integer_and_Negative_Integer "2529. Maximum Count of Positive Integer and Negative Integer.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
