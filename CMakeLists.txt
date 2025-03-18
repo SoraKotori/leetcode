@@ -63,5 +63,6 @@ add_executable(2965_Find_Missing_and_Repeated_Values "2965. Find Missing and Rep
 add_executable(1358_Number_of_Substrings_Containing_All_Three_Characters "1358. Number of Substrings Containing All Three Characters.cpp")
 add_executable(2529_Maximum_Count_of_Positive_Integer_and_Negative_Integer "2529. Maximum Count of Positive Integer and Negative Integer.cpp")
 add_executable(2401_Longest_Nice_Subarray "2401. Longest Nice Subarray.cpp")
+add_executable(2206_Divide_Array_Into_Equal_Pairs "2206. Divide Array Into Equal Pairs.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
