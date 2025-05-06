@@ -66,5 +66,6 @@ add_executable(2401_Longest_Nice_Subarray "2401. Longest Nice Subarray.cpp")
 add_executable(2206_Divide_Array_Into_Equal_Pairs "2206. Divide Array Into Equal Pairs.cpp")
 add_executable(2115_Find_All_Possible_Recipes_from_Given_Supplies "2115. Find All Possible Recipes from Given Supplies.cpp")
 add_executable(38_Count_and_Say "38. Count and Say.cpp")
+add_executable(1920_Build_Array_from_Permutation "1920. Build Array from Permutation.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
