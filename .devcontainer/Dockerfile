@@ -1,7 +1,8 @@
-FROM ubuntu:24.04 as base
+FROM ubuntu:24.04 AS base
 
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update
+
+RUN apt-get install -y --no-install-recommends \
     cmake ninja-build
 
 RUN apt-get install -y --no-install-recommends \
@@ -10,7 +11,9 @@ RUN apt-get install -y --no-install-recommends \
 RUN apt-get install -y --no-install-recommends \
     libgtest-dev
 
-FROM base as development
+FROM base AS development
+
+RUN apt-get update
 
 RUN apt-get install -y --no-install-recommends \
     gdb
