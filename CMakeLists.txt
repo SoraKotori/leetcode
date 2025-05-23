@@ -69,5 +69,6 @@ add_executable(38_Count_and_Say "38. Count and Say.cpp")
 add_executable(1920_Build_Array_from_Permutation "1920. Build Array from Permutation.cpp")
 add_executable(1128_Number_of_Equivalent_Domino_Pairs "1128. Number of Equivalent Domino Pairs.cpp")
 add_executable(3355_Zero_Array_Transformation_I "3355. Zero Array Transformation I.cpp")
+add_executable(73_Set_Matrix_Zeroes "73. Set Matrix Zeroes.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
