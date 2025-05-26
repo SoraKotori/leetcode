@@ -31,47 +31,31 @@
 class Solution {
 public:
     int longestPalindrome(vector<string>& words) {
-        array<array<pair<int, int>, 26>, 26> diff{};
-        array<int, 26> same{};
+        array<array<int, 26>, 26> map{};
 
         int count = 0;
         for (const auto& str : words)
         {
-            if (str[0] < str[1])
-            {
-                auto first = str[0] - 'a';
-                auto second = str[1] - 'a';
+            auto first = str[0] - 'a';
+            auto second = str[1] - 'a';
 
-                auto& pair = diff[first][second];
-                if (++pair.first <= pair.second)
-                    count += 4;
-            }
-            else if (str[0] > str[1])
+            if (map[second][first])
             {
-                auto first = str[1] - 'a';
-                auto second = str[0] - 'a';
-
-                auto& pair = diff[first][second];
-                if (pair.first >= ++pair.second)
-                    count += 4;
+                map[second][first]--;
+                count += 4;
             }
             else
+                map[first][second]++;
+        }
+
+        for (int i = 0; i < 26; i++)
+            if (map[i][i])
             {
-                auto ch = str[0] - 'a';
-                auto cnt = ++same[ch];
+                count += 2;
+                break;
             }
-        }
 
-        auto one = 0;
-        for (auto c : same)
-        {
-            if (c % 2)
-                one = 2;
-            if (c > 1)
-                count += (c / 2) * 4;
-        }
-
-        return count + one;
+        return count;
     }
 };
 
