@@ -72,5 +72,6 @@ add_executable(3355_Zero_Array_Transformation_I "3355. Zero Array Transformation
 add_executable(73_Set_Matrix_Zeroes "73. Set Matrix Zeroes.cpp")
 add_executable(2131_Longest_Palindrome_by_Concatenating_Two_Letter_Words "2131. Longest Palindrome by Concatenating Two Letter Words.cpp")
 add_executable(2894_Divisible_and_Non-divisible_Sums_Difference "2894. Divisible and Non-divisible Sums Difference.cpp")
+add_executable(2942_Find_Words_Containing_Character "2942. Find Words Containing Character.cpp")
 
 target_link_libraries(1368_Minimum_Cost_to_Make_at_Least_One_Valid_Path_in_a_Grid gtest gtest_main)
